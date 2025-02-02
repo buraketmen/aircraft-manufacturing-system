@@ -1,0 +1,46 @@
+<!-- prettier-ignore -->
+{% extends 'base.html' %} {% load account_tags %} {% load static %} {% block content %}
+<div class="row">
+    <div class="col-12">
+        {% if user.is_authenticated %}
+        <div class="d-inline-flex flex-row align-items-center justify-content-between w-100 mb-2">
+            <h6>Welcome, {{ user|display_name }}</h6>
+            {% if user_has_team %}
+            <h6>{{ user.teammember.team.get_name_display }}</h6>
+            {% endif %}
+        </div>
+        {% if user_has_team %} 
+            {% include "parts/list.html" %} 
+            {% include "aircraft/list.html" %} 
+            {% include "inventory/status.html" %} 
+        {% else %}
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title mb-4">Welcome to Aircraft Manufacturing System</h5>
+                <p class="card-text">You are not part of any team. Please contact your admin to join a team.</p>
+            </div>
+        </div>
+        {% endif %} {% else %}
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Welcome to Aircraft Manufacturing System</h5>
+                <p class="card-text">Please login to continue.</p>
+                <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} {% block extra_js %} {% csrf_token %}
+<script src="{% static 'js/parts.js' %}"></script>
+<script src="{% static 'js/aircraft.js' %}"></script>
+<script src="{% static 'js/inventory.js' %}"></script>
+<script src="{% static 'js/index.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        {% if user.is_authenticated %}
+            initializeComponents();
+        {% endif %}
+    });
+</script>
+{% endblock %}

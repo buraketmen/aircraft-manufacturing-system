@@ -1,0 +1,106 @@
+{% load account_tags %}
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Aircrafts</h5>
+        {% if can_assemble_aircraft %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assembleAircraftModal">
+            Assemble Aircraft
+        </button>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        <table id="aircraft-table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Serial No</th>
+                    <th>Type</th>
+                    <th>Assembled By</th>
+                    <th>Assembled At</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<!-- Assemble Aircraft Modal -->
+<div class="modal fade" id="assembleAircraftModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assemble New Aircraft</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assembleAircraftForm">
+                    <div class="mb-3">
+                        <label for="aircraftType" class="form-label">Aircraft</label>
+                        <select class="form-select" id="aircraftType" required>
+                            <option value="">Select the Aircraft</option>
+                            {% for type in aircraft_types %}
+                            <option value="{{ type.id }}">{{ type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div id="assemblyStatus" class="alert" style="display: none"></div>
+                    <div id="availablePartsSection" style="display: none">
+                        <h6 class="text-center">Select Parts</h6>
+                        <!-- Will be injected by aircraft.js -->
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="assembleButton" onclick="assembleAircraft()" disabled>
+                    Assemble
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Aircraft Details Modal -->
+<div class="modal fade" id="aircraftDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Aircraft Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col">
+                        <p class="text-muted mb-0 fw-bold">Aircraft</p>
+                        <p id="detailAircraftType"></p>
+                        
+                    </div>
+                    <div class="col">
+                        <p class="text-muted mb-0 fw-bold">Assembled By</p>
+                        <p id="detailAssembledBy"></p>
+                    </div>
+                    <div class="col">
+                        <p class="text-muted mb-0 fw-bold">Assembled At</p>
+                        <p id="detailAssembledAt"></p>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Serial No</th>
+                                <th>Part Type</th>
+                                <th>Produced By</th>
+                                <th>Produced At</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detailPartsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
