@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Team, TeamMember, TeamType
+from accounts.utils import get_user_display_name
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -11,9 +12,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'is_staff', 'date_joined', 'display_name')
 
     def get_display_name(self, obj):
-        if obj.first_name and obj.last_name:
-            return f"{obj.first_name} {obj.last_name}"
-        return obj.username
+        # use "display_name"
+        return get_user_display_name(user=obj)
 
 
 class TeamTypeSerializer(serializers.ModelSerializer):
