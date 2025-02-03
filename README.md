@@ -62,6 +62,7 @@ pip install -r requirements.txt
 ### 4) Set up database:
 
 ```bash
+cd aircraft_manufacturing
 python manage.py makemigrations
 python manage.py migrate
 ```
